@@ -1,0 +1,84 @@
+.main {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainBox {
+  width: 85%;
+  height: 70vh;
+  border-radius: 1rem;
+  box-shadow: 0px 0px 30px var(--shadow-clr);
+  padding: 10px;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  flex-direction: column;
+}
+.heading {
+  /* background-color: black; */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+}
+.headingText {
+  font-family: 'DM Serif Text', serif;
+  font-weight: bolder;
+  text-align: center;
+  font-size: 70px;
+}
+
+.headingButtons a {
+  text-decoration: none;
+  font-size: large;
+  padding: 3px 10px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  color: var(--text-clr);
+}
+.headingButtons button {
+  padding: 5px 20px;
+  margin: 0 50px;
+  border-radius: 0.5rem;
+  border: none;
+}
+
+.headingButtons {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.fields {
+  margin-top: 40px;
+}
+.register,
+.login {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.loginBtn,
+.registerBtn {
+  padding: 5px 20px;
+  margin: 30px 50px;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 18px;
+  background-color: var(--light-blue);
+}
+
+.error {
+  background-color: rgb(255, 211, 211);
+  color: red;
+  text-align: center;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 0.5rem;
+}

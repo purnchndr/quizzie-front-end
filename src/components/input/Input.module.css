@@ -1,0 +1,27 @@
+.inputBox {
+  font-weight: 700;
+  margin: 10px 10px;
+  display: flex;
+  justify-content: flex-start;
+  /* align-items: center; */
+
+  /* width: 100%; */
+  /* text-align: center; */
+  /* width: 200px; */
+}
+
+.inputlebel {
+  margin-right: 20px;
+  /* font-size: 17px; */
+  width: 50%;
+  text-align: right;
+}
+.inputfield {
+  border: none;
+  /* width: 50%; */
+  /* text-align: left; */
+  font-size: 17px;
+  padding: 5px 20px;
+  border-radius: 0.4rem 0.4rem 0 0;
+  background-color: rgb(218, 218, 218);
+}
