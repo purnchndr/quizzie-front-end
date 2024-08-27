@@ -58,7 +58,7 @@
   padding: 10px;
 }
 .selectedCircle {
-  background-color: var(--ligh-green);
+  background-color: var(--light-green);
   /* color: white; */
 }
 
@@ -244,7 +244,7 @@
 }
 
 .selectedInput {
-  background-color: var(--ligh-green);
+  background-color: var(--light-green);
   border-radius: 0.5rem;
 }
 .seletorSideBox {

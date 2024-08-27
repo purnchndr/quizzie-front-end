@@ -1,5 +1,5 @@
 import { useReducer, useState } from 'react';
-import { Slide, ToastContainer, toast } from 'react-toastify';
+import {  ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import DashboardHeader from '../../components/dashboardHeader/DashboardHeader';

@@ -1,7 +1,14 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import style from './DashboardHeader.module.css';
 
 function DashboardHeader() {
+  const navigate = useNavigate();
+
+  function logout() {
+    //todo update logout
+    console.log(logout);
+    navigate('/login');
+  }
   return (
     <nav className={style.dashboardHeader}>
       <div className={style.logoBox}>
@@ -10,11 +17,11 @@ function DashboardHeader() {
       <div className={style.navlinks}>
         <NavLink to='/dashboard'>DashBoard</NavLink>
         <NavLink to='/analytics'>Analytics</NavLink>
-        <NavLink to='/createquiz'>Create Quiz</NavLink>
+        <NavLink to='/createquize'>Create Quiz</NavLink>
       </div>
       <div className={style.logoutBox}>
         <hr />
-        <button>Logout</button>
+        <button onClick={logout}>Logout</button>
       </div>
     </nav>
   );

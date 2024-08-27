@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import style from './LoginAndSignUp.module.css';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Input from '../../components/input/Input';
+import { toast, ToastContainer } from 'react-toastify';
 
 function LoginAndSignUp() {
   const location = useLocation();
@@ -9,6 +10,7 @@ function LoginAndSignUp() {
 
   return (
     <div className={style.main}>
+      <ToastContainer />
       <div className={style.mainBox}>
         <div className={style.heading}>
           <h1 className={style.headingText}>Quizzie</h1>
@@ -30,16 +32,26 @@ function LoginAndSignUp() {
 }
 
 function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handelPassword = e => {
-    if (password === 'a') handelError('Password is too sort');
-    setPassword(e.target.value);
-  };
-  const handelError = e => setError(e);
+  const handelPassword = e => setPassword(e.target.value);
   const handelEmail = e => setEmail(e.target.value);
+
+  function login() {
+    if (!email) {
+      setError('Email is required');
+      return toast.error('Email is required');
+    }
+    if (!password) {
+      setError('Password is required');
+      return toast.error('Password is required');
+    }
+    console.log('login');
+    navigate('/dashboard');
+  }
 
   return (
     <div className={style.login}>
@@ -60,12 +72,15 @@ function Login() {
         handeler={handelPassword}
       />
       {error && <p className={style.error}>{error}</p>}
-      <button className={style.loginBtn}>Login</button>
+      <button className={style.loginBtn} onClick={login}>
+        Login
+      </button>
     </div>
   );
 }
 
 function Register() {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -76,6 +91,28 @@ function Register() {
   const handelEmail = e => setEmail(e.target.value);
   const handelPassword = e => setPassword(e.target.value);
   const handelPassword2 = e => setPassword2(e.target.value);
+
+  function register() {
+    if (!name) {
+      setError('Name is required');
+      return toast.error('Name is required');
+    }
+    if (!email) {
+      setError('Email is required');
+      return toast.error('Email is required');
+    }
+    if (!password) {
+      setError('Password is required');
+      return toast.error('Password is required');
+    }
+    if (!password2) {
+      setError('Please Repeat Password');
+      return toast.error('Please Repeat Password');
+    }
+    console.log('register');
+    navigate('/dashboard');
+  }
+
   return (
     <div className={style.register}>
       <Input
@@ -111,7 +148,9 @@ function Register() {
         handeler={handelPassword2}
       />
       {error && <p className={style.error}>{error}</p>}
-      <button className={style.registerBtn}>Sign UP</button>
+      <button className={style.registerBtn} onClick={register}>
+        Sign UP
+      </button>
     </div>
   );
 }
