@@ -1,5 +1,5 @@
 import Analytics from './pages/analytics/Analytics';
-import CreateQuize from './pages/createQuize/createQuize';
+// import CreateQuize from './pages/createQuize/createQuize';
 import Dashboard from './pages/dashboard/Dashboard';
 import LoginAndSignUp from './pages/loginAndSignUp/LoginAndSignUp';
 
@@ -11,7 +11,7 @@ const router = createBrowserRouter([
   { path: '/register', element: <LoginAndSignUp /> },
   { path: '/dashboard', element: <Dashboard /> },
   { path: '/analytics', element: <Analytics /> },
-  { path: '/createquize', element: <CreateQuize /> },
+  // { path: '/createquize', element: <CreateQuize /> },
 ]);
 
 function App() {
