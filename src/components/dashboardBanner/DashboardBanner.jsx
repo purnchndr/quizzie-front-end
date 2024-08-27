@@ -23,7 +23,12 @@ function DashBannerSmall({ name, num, date }) {
         <span className={style.name}>{name}</span>
         <span className={style.numSmall}>
           {num}{' '}
-          <img src='./img/eye.svg' width='15px' height='15px' alt='eye logo' />
+          <img
+            src='./img/views.svg'
+            width='15px'
+            height='15px'
+            alt='eye logo'
+          />
         </span>
       </div>
       <div>
