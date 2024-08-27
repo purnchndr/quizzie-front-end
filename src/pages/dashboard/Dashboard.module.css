@@ -1,0 +1,30 @@
+.dashboard {
+  display: flex;
+  justify-content: space-between;
+  /* padding: 30px; */
+  /* background-color: white; */
+}
+
+.main {
+  width: 100%;
+  margin: 30px;
+  background-color: var(--bg-clr);
+}
+
+.largeDashboard {
+  padding: 50px 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.trending {
+  margin: 30px;
+}
+
+.trandingQuizes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}

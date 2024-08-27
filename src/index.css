@@ -1,8 +1,13 @@
 :root {
   --text-clr: #313131;
-  --light-blue: #bdbdff;
   --bg-clr: #e8e8e8;
   --shadow-clr: #6b6b6b;
+  --light-blue: #d4d4fb;
+  --blue: #5959ff;
+  --orange: #ff5100;
+  --green: #008000;
+  --ligh-green: #aff2af;
+  --modal-bg: #000000c0;
 }
 
 body {
@@ -10,14 +15,16 @@ body {
   padding: 0;
   background-color: var(--bg-clr);
   color: var(--text-clr);
-  font-family: 'Lato', sans-serif;
+  font-family: 'Merriweather', serif;
   font-weight: 400;
+  box-sizing: border-box;
 }
 button {
   cursor: pointer;
 }
 
-.btn-active {
+.btn-active,
+.active {
   box-shadow: 0 0 25px var(--shadow-clr);
 }
 
@@ -38,5 +45,23 @@ button {
   font-weight: 700;
   font-style: normal;
 }
+
+.merriweather-regular {
+  font-family: "Merriweather", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+  .kanit-regular {
+  font-family: "Kanit", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.kanit-bold {
+  font-family: "Kanit", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
 
 */

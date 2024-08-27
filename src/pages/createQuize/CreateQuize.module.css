@@ -1,0 +1,340 @@
+.createQuize {
+  display: flex;
+  justify-content: space-between;
+}
+.main {
+  width: 100%;
+  height: 100%;
+  /* margin: 30px; */
+  background-color: var(--bg-clr);
+}
+
+.modalBG {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--modal-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modalBody {
+  background-color: white;
+  border-radius: 1rem;
+  min-width: 50%;
+  max-width: 90%;
+}
+
+.startBox {
+  background-color: white;
+  padding: 50px;
+  border-radius: 1rem;
+}
+.quizeName {
+  font-size: 22px;
+  padding: 10px 15px;
+  width: 90%;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  margin-bottom: 30px;
+}
+
+.questionType,
+.actionBtn {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.questionType {
+  margin-bottom: 40px;
+}
+.questionBody {
+  padding: 10px;
+}
+.selectedCircle {
+  background-color: var(--ligh-green);
+  /* color: white; */
+}
+
+/* .quesSelectorBox {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+} */
+
+.questionType p {
+  font-size: 20px;
+  color: var(--shadow-clr);
+}
+
+.startBox button {
+  padding: 5px 20px;
+  margin: 0 50px;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: large;
+  box-shadow: 0 0 5px var(--shadow-clr);
+}
+.active {
+  background-color: var(--blue);
+  color: white;
+}
+
+.cancelBtn {
+  background-color: var(--orange);
+  color: white;
+}
+.createBtn {
+  background-color: var(--green);
+  color: white;
+}
+
+.create {
+  /* width: 200px; */
+  margin-top: 200px;
+  height: 100%;
+  background-color: var(--bg-clr);
+  border-radius: 1rem;
+  padding: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.create p {
+  font-size: 30px;
+}
+
+.qnaQuizeBox {
+  background-color: white;
+  /* padding: 30px; */
+  border-radius: 1rem;
+}
+.qnaQuizeheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-clr);
+  border-radius: 1rem 1rem 0 0;
+  padding: 0px 30px;
+}
+.qnaQuizeheader h1 {
+  margin-right: 100px;
+}
+
+.qnaQuizeheader p {
+  font-size: 14px;
+  color: var(--orange);
+}
+.quesList {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  border: 2px dotted var(--shadow-clr);
+  margin: 0 0 10px 0;
+  border-radius: 1rem;
+}
+.questionCircle {
+  border: 1px solid var(--shadow-clr);
+  border-radius: 2rem;
+  position: relative;
+  margin: 0 50px;
+  cursor: pointer;
+  text-align: center;
+  width: 40px;
+}
+.quesNumber {
+  font-size: 30px;
+}
+.quesNumberDel {
+  position: absolute;
+  top: 0;
+  right: -10px;
+}
+
+.quesName input {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 0;
+  text-align: center;
+  width: 100%;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.quesTypeSelect {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 16px;
+  border-bottom: 1px solid var(--shadow-clr);
+}
+
+.quesTypeSelect label {
+  background-color: var(--bg-clr);
+  border-radius: 05rem;
+  padding: 5px 10px;
+}
+
+.hiddenBtn {
+  display: none;
+}
+
+.selectorInputs {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+}
+
+.selectorInputText {
+  font-size: 18px;
+  padding: 10px 15px;
+  width: 70%;
+  border: none;
+  margin: 10px;
+  border-radius: 0.5rem;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.selectorInputRadio {
+  width: 20px;
+  padding: 20px;
+}
+
+.selectorInput button,
+.fieldDeleteBtn {
+  background-color: transparent;
+  border: none;
+}
+
+.selectorInput {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.createActionBtns {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: var(--bg-clr);
+  padding: 15px 0;
+  border-radius: 0 0 1rem 1rem;
+}
+
+.createActionBtns button {
+  padding: 5px 20px;
+  margin: 0 50px;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: large;
+  box-shadow: 0 0 5px var(--shadow-clr);
+}
+
+.selectedInput {
+  background-color: var(--ligh-green);
+  border-radius: 0.5rem;
+}
+.seletorSideBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.selectorTimer {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 0 40px;
+  margin-bottom: 10px;
+}
+
+.selectorTimer button {
+  /* padding: 5px 20px; */
+  margin: 5px 0;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: large;
+  box-shadow: 0 0 5px var(--shadow-clr);
+}
+.timerBtn {
+  background-color: var(--orange);
+  color: white;
+}
+
+.questionAddBox {
+  cursor: pointer;
+}
+.submitBox {
+  background-color: white;
+  width: 500px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  border-radius: 1rem;
+  position: relative;
+}
+
+.submitBox p {
+  font-size: 20px;
+}
+
+.submitBox input {
+  font-size: 20px;
+  padding: 3px 10px;
+  border: none;
+  background-color: var(--bg-clr);
+  color: var(--shadow-clr);
+  text-align: center;
+  border-radius: 0.5rem;
+  display: block;
+  cursor: pointer;
+}
+
+.submitBox button {
+  margin: 30px 0 10px 0;
+  font-size: 20px;
+  padding: 3px 40px;
+  border: none;
+  background-color: var(--green);
+  color: white;
+  text-align: center;
+  border-radius: 0.5rem;
+}
+.submitBoxClose {
+  margin: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 5px 10px;
+  background-color: var(--bg-clr);
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.qnaQuizeheader p {
+  margin: 2px 10px;
+  color: var(--shadow-clr);
+}
+
+.selectorText {
+  width: 100%;
+}

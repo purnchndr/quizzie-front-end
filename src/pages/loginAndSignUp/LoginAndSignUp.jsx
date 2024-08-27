@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import style from './LoginAndSignUp.module.css';
 import { Link, useLocation } from 'react-router-dom';
-import Input from '../components/input/Input';
+import Input from '../../components/input/Input';
 
 function LoginAndSignUp() {
   const location = useLocation();

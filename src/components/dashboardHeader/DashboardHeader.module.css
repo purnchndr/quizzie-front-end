@@ -1,0 +1,60 @@
+.dashboardHeader {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100vh;
+  padding: 0 30px;
+  background-color: white;
+  /* margin: 20px 10px; */
+  box-shadow: 0 0 20px var(--shadow-clr);
+}
+.navlinks {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  /* height: 92vh;
+  width: 200px;
+  padding: 20px 10px; */
+}
+
+.navlinks a {
+  text-decoration: none;
+  text-align: center;
+  margin: 20px 0;
+  padding: 5px 0;
+  font-weight: 700;
+  color: var(--text-clr);
+}
+.headingButtons button {
+  padding: 5px 170px;
+  margin: 0 50px;
+  border-radius: 1rem;
+  border: none;
+}
+
+.logoBox {
+  padding: 10px 5px;
+  text-align: center;
+}
+.logoBox h1 {
+  font-weight: 700;
+  font-size: 32px;
+}
+.logoutBox {
+  padding: 10px 5px;
+  text-align: center;
+}
+
+.logoutBox button {
+  padding: 5px 20px;
+  /* margin: 30px 50px; */
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 18px;
+  background-color: var(--light-blue);
+  color: var(--blue);
+}
+.logoutBox hr {
+  border: 1px solid var(--text-clr);
+  margin: 10px 12px;
+}
