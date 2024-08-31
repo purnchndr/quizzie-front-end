@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+
 import {
   DashBannerLarge,
   DashBannerSmall,
 } from '../../components/dashboardBanner/DashboardBanner';
 import DashboardHeader from '../../components/dashboardHeader/DashboardHeader';
 import style from './Dashboard.module.css';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
   const [trending, setTranding] = useState([
@@ -24,6 +27,7 @@ function Dashboard() {
   const [score, setScore] = useState([90, 1900, 1400]);
   return (
     <div className={style.dashboard}>
+      <ToastContainer />
       <DashboardHeader />
       <main className={style.main}>
         <div className={style.largeDashboard}>

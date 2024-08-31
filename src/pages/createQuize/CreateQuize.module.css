@@ -289,14 +289,15 @@
   flex-direction: column;
   border-radius: 1rem;
   position: relative;
+  border: 3px solid var(--green);
 }
 
-.submitBox p {
+/* .submitBox p {
   font-size: 20px;
-}
+} */
 
-.submitBox input {
-  font-size: 20px;
+.submitLink {
+  font-size: 16px;
   padding: 3px 10px;
   border: none;
   background-color: var(--bg-clr);
@@ -322,11 +323,8 @@
   position: absolute;
   right: 0;
   top: 0;
-  font-weight: bold;
   font-size: 20px;
-  padding: 5px 10px;
-  background-color: var(--bg-clr);
-  border-radius: 1rem;
+  padding: 3px;
   cursor: pointer;
 }
 

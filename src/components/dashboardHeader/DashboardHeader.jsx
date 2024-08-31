@@ -6,7 +6,8 @@ function DashboardHeader() {
 
   function logout() {
     //todo update logout
-    console.log(logout);
+    console.log('logout');
+    localStorage.removeItem('auth-token');
     navigate('/login');
   }
   return (

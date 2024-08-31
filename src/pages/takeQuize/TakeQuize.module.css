@@ -1,0 +1,173 @@
+.mainModalBG {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--modal-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-clr);
+}
+
+.welcomeBox {
+  background-color: white;
+  max-width: 500px;
+  max-height: 500px;
+  padding: 15px;
+  border-radius: 1rem;
+  border: 2px solid var(--green);
+  text-align: center;
+  margin: 10px;
+}
+
+.welcomeBox h1 {
+  font-size: 26px;
+}
+
+.welcomeBox p {
+  color: var(--text-clr);
+}
+.welcomeButtons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.welcomeButtons button {
+  padding: 5px 20px;
+  margin: 0 10px;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 700;
+  color: white;
+  font-size: 18px;
+}
+.welcomeButtonC {
+  background-color: var(--orange);
+}
+
+.welcomeButtonS {
+  background-color: var(--green);
+}
+
+.startBox {
+  background-color: white;
+  max-width: 600px;
+  max-height: 90%;
+  min-width: 70%;
+  padding: 15px;
+  border-radius: 1rem;
+  border: 2px solid var(--green);
+  text-align: center;
+  margin: 10px;
+}
+
+.startHeader {
+  font-size: 12px;
+  box-shadow: 0px 2px 3px black;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.startHeader h1 {
+  font-size: 26px;
+  margin: 1px;
+  display: inline-block;
+}
+
+.startP {
+  display: inline-block;
+}
+
+.startHeader p {
+  font-size: 14px;
+  margin: 5px;
+  display: inline-block;
+}
+
+.questionHeader {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 1rem;
+  box-shadow: 0 2px 3px black;
+}
+
+.timer {
+  color: var(--orange);
+  font-weight: bold;
+}
+
+.questionNumber {
+  color: var(--green);
+  font-weight: bold;
+}
+
+.questionName {
+  font-size: 20px;
+}
+
+.options {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 10px 5px;
+  padding: 5px;
+}
+
+.option {
+  flex: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.questionBtn {
+  padding: 15px 20px;
+  margin: 0 10px;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 2px 2px black;
+}
+
+.questionImg {
+  width: 200px;
+  height: 80px;
+}
+
+.questionSelected {
+  border: 2px solid var(--green);
+}
+
+.optionTI {
+  width: 200px;
+  height: 120px;
+  cursor: pointer;
+  /* border: 2px solid red; */
+  background-color: var(--bg-clr);
+}
+
+.optionTI img {
+  width: 100%;
+  height: 80px;
+  /* border: 2px solid black; */
+}
+
+.optionTI p {
+  margin: 1px 2px;
+}
+
+.submitQNABox p {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.submitQNABox span {
+  color: var(--green);
+}

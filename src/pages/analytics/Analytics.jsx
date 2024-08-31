@@ -1,15 +1,18 @@
 import style from './Analytics.module.css';
 
 import DashboardHeader from '../../components/dashboardHeader/DashboardHeader';
-import { useState } from 'react';
+import Loder from '../../components/loder/Loder';
+import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 function Analytics() {
   const [delModal, setDelModal] = useState(false);
   const [quesModal, setQuesModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([
     {
       sr: 1,
@@ -40,6 +43,38 @@ function Analytics() {
       id: 101,
     },
   ]);
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      const token = localStorage.getItem('auth-token');
+      let data = '';
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: 'http://localhost:3000/api/quize',
+        headers: {
+          'auth-token': token,
+        },
+        data: data,
+      };
+      axios.request(config).then(success).catch(fail);
+      function success(res) {
+        const data = res;
+        console.log(JSON.stringify(data));
+        setLoading(false);
+      }
+
+      function fail(err) {
+        const msg = err.response?.data?.message || err.message;
+        toast.error(msg);
+        console.log(err);
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
   // console.log(data);
   const handelSelected = c => setSelected(c);
   const showDelModal = () => setDelModal(true);
@@ -61,6 +96,7 @@ function Analytics() {
   return (
     <>
       <div className={style.analytics}>
+        <ToastContainer />
         <DashboardHeader />
         <main className={style.main}>
           <ToastContainer />
@@ -86,11 +122,6 @@ function Analytics() {
                     select={handelSelected}
                     share={handelShare}
                     data={curr}
-                    // sr={curr.sr}
-                    // name={curr.name}
-                    // date={curr.data}
-                    // imp={curr.imp}
-                    // id={curr.id}
                     key={i}
                     showDelModal={showDelModal}
                     showQuestion={showQuesModal}
@@ -113,6 +144,7 @@ function Analytics() {
         <QuestionAnalysis selected={selected} close={hideQuesModal} />
       )}
       {editModal && <EditModal closeEM={setEditModal} selected={selected} />}
+      {loading && <Loder />}
     </>
   );
 }
@@ -367,11 +399,11 @@ function EditModal({ selected, closeEM }) {
         </div>
 
         <div className={style.editModalFooter}>
-          <button className={style.delConfirm} onClick={() => handelEdit(id)}>
-            Confirm Delete
-          </button>
           <button className={style.delCancel} onClick={closeModal}>
             Cancel
+          </button>
+          <button className={style.saveConfirm} onClick={() => handelEdit(id)}>
+            Save Changes
           </button>
         </div>
       </div>
