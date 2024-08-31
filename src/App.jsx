@@ -1,6 +1,5 @@
-import { ToastContainer } from 'react-toastify';
 import Analytics from './pages/analytics/Analytics';
-import CreateQuize from './pages/createQuize/createQuize';
+import CreateQuize from './pages/createQuize/CreateQuize';
 import Dashboard from './pages/dashboard/Dashboard';
 import LoginAndSignUp from './pages/loginAndSignUp/LoginAndSignUp';
 

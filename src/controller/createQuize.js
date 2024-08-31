@@ -187,14 +187,14 @@ async function quizeUpload(data) {
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: 'http://localhost:3000/api/quize',
+    url: 'https://quizzie-back-end-pygi.onrender.com/api/quize',
     headers: { 'auth-token': authToken },
     data: data,
   };
   try {
     const res = await axios.request(config); //.then(success).catch(fail);
     const { id, message, result } = res.data;
-    data.link = `https://exmple.com/quize/${id}`;
+    data.link = `https://prataps-quizzi.netlify.app/${id}`;
     // data.submitted = true;
     toast.success('Quize created');
     console.log(res.data);

@@ -65,7 +65,7 @@ function Login({ setAuth }) {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'http://localhost:3000/api/user/login',
+        url: 'https://quizzie-back-end-pygi.onrender.com/api/user/login',
         headers: {},
         data: { email, password },
       };
@@ -164,7 +164,7 @@ function Register({ setAuth }) {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'http://localhost:3000/api/user/register',
+        url: 'https://quizzie-back-end-pygi.onrender.com/api/user/register',
         headers: {},
         data: { name, email, password },
       };

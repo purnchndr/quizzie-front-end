@@ -18,7 +18,7 @@ function TakeQuize() {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `http://localhost:3000/api/quize/${id}`,
+        url: `https://quizzie-back-end-pygi.onrender.com/api/quize/${id}`,
         headers: { 'auth-token': token },
         data: {},
       };

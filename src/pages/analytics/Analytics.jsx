@@ -52,7 +52,7 @@ function Analytics() {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'http://localhost:3000/api/quize',
+        url: 'https://quizzie-back-end-pygi.onrender.com/api/quize',
         headers: {
           'auth-token': token,
         },
