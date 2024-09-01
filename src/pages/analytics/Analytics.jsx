@@ -54,11 +54,6 @@ function Analytics() {
     fetchData();
   }, [refresh]);
 
-  const handelSelected = c => setSelected(c);
-
-  const showQuesModal = () => setQuesModal(true);
-  const hideQuesModal = () => setQuesModal(false);
-
   function handelShare(id) {
     navigator.clipboard.writeText(`https://prataps-quizzi.netlify.app/${id}`);
     toast.success('Link Copied to Clipboard');
@@ -86,17 +81,15 @@ function Analytics() {
                     <td>View Details</td>
                   </tr>
                 </thead>
-
                 <tbody>
                   {data.map((curr, i) => (
                     <DataRow
-                      select={handelSelected}
                       share={handelShare}
                       data={curr}
                       key={i}
                       sr={i + 1}
                       setDelModal={setDelModal}
-                      showQuestion={showQuesModal}
+                      setQuesModal={setQuesModal}
                       showEdit={setEditModal}
                     />
                   ))}
@@ -114,7 +107,7 @@ function Analytics() {
         />
       )}
       {quesModal && (
-        <QuestionAnalysis selected={selected} close={hideQuesModal} />
+        <QuestionAnalysis quesModal={quesModal} setQuesModal={setQuesModal} />
       )}
       {editModal && <EditModal closeEM={setEditModal} id={editModal} />}
       {loading && <Loder />}
@@ -123,14 +116,13 @@ function Analytics() {
 }
 
 function DataRow(props) {
-  const { select, setDelModal, share, showQuestion, showEdit, data, sr } =
-    props;
+  const { setDelModal, share, setQuesModal, showEdit, data, sr } = props;
   const { name, createdOn, impressions, _id } = data;
   const imp =
     impressions > 999 ? `${(impressions / 1000).toFixed(1)} + K` : impressions;
   const dateStr = new Date(createdOn).toLocaleDateString();
   return (
-    <tr onClick={() => select({ name, _id, sr })}>
+    <tr>
       <td>{sr}</td>
       <td>{name}</td>
       <td>{dateStr}</td>
@@ -144,7 +136,7 @@ function DataRow(props) {
       <td className={style.share} onClick={() => share(_id)}>
         <img src='/img/share.svg' width='20px' alt='share icon' />
       </td>
-      <td className={style.link} onClick={() => showQuestion(_id)}>
+      <td className={style.link} onClick={() => setQuesModal(_id)}>
         Question Wise Analysis
       </td>
     </tr>
@@ -220,7 +212,6 @@ function DeleteConfirmation({ setRefresh, setDelModal, deleteModal }) {
 
 function EditModal({ id, closeEM }) {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(null);
   const [quize, setQuize] = useState(null);
 
   useEffect(() => {
@@ -285,7 +276,7 @@ function EditModal({ id, closeEM }) {
       let config = {
         method: 'patch',
         maxBodyLength: Infinity,
-        url: `http://localhost:3000/api/quize/${id}`,
+        url: `https://quizzie-back-end-pygi.onrender.com/api/quize/${id}`,
         headers: {
           'auth-token': token,
         },
@@ -316,12 +307,15 @@ function EditModal({ id, closeEM }) {
   return (
     <>
       {loading && <Loder />}
-      {quize && (
+      {!loading && quize && (
         <div className={style.editModalBg}>
           <div className={style.editModal}>
             <div className={style.editHeader}>
               <span>Edit</span>
               <h1>{quize.name}</h1>
+              <span>
+                {quize.type} Type || {quize.questions.length} Questions
+              </span>
             </div>
             <div className={style.editBody}>
               {quize.questions.map((c, i) => (
@@ -360,113 +354,103 @@ function QuestionEditor({ prop }) {
   const { c, i, nameChange, changeOptionT, changeOptionI } = prop;
   return (
     <div key={i} className={style.editQuestion}>
-      <>
-        <label>
-          Question {i + 1}:
-          <input type='text' value={c.name} onChange={e => nameChange(i, e)} />
-        </label>
-        <div className={style.editOptions}>
-          {c.options.map((d, j) => (
-            <div
-              className={[
-                d.currect ? style.currectOption : '',
-                style.questionOption,
-              ].join(' ')}
-              key={j}
-            >
-              {c.type === 't' && (
-                <>
-                  <input
-                    type='text'
-                    value={d.text}
-                    onChange={e => changeOptionT(i, j, e)}
-                  />
-                </>
-              )}
+      <p>
+        Question : {i + 1} || {c.timer ? `Time : ${c.timer / 1000} Sec` : ''}
+      </p>
 
-              {c.type === 'i' && (
-                <>
-                  <img src={d.url} alt='option' />
-                  <input
-                    type='url'
-                    value={d.url}
-                    onChange={e => changeOptionI(i, j, e)}
-                  />
-                </>
-              )}
+      <input type='text' value={c.name} onChange={e => nameChange(i, e)} />
 
-              {c.type === 'ti' && (
-                <>
-                  <input
-                    type='text'
-                    value={d.text}
-                    onChange={e => changeOptionT(i, j, e)}
-                  />
-                  <img src={d.url} alt='option' />
-                  <input
-                    type='url'
-                    value={d.url}
-                    onChange={e => changeOptionI(i, j, e)}
-                  />
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      </>
+      <div className={style.editOptions}>
+        {c.options.map((d, j) => (
+          <div
+            className={[
+              d.currect ? style.currectOption : '',
+              style.questionOption,
+            ].join(' ')}
+            key={j}
+          >
+            {c.type === 't' && (
+              <>
+                <input
+                  type='text'
+                  value={d.text}
+                  onChange={e => changeOptionT(i, j, e)}
+                />
+              </>
+            )}
+
+            {c.type === 'i' && (
+              <>
+                <img src={d.url} alt='option' />
+                <input
+                  type='url'
+                  value={d.url}
+                  onChange={e => changeOptionI(i, j, e)}
+                />
+              </>
+            )}
+
+            {c.type === 'ti' && (
+              <>
+                <input
+                  type='text'
+                  value={d.text}
+                  onChange={e => changeOptionT(i, j, e)}
+                />
+                <img src={d.url} alt='option' />
+                <input
+                  type='url'
+                  value={d.url}
+                  onChange={e => changeOptionI(i, j, e)}
+                />
+              </>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-function QuestionEditor2({ prop }) {
-  const { c, i, nameChange, changeOptionT, changeOptionI } = prop;
-  return (
-    <div key={i} className={style.editQuestion}>
-      <>
-        <label>
-          Question {i + 1}:
-          <input type='text' value={c.name} onChange={e => nameChange(i, e)} />
-        </label>
-        <div className={style.editOptions}>
-          {c.options.map((d, j) => (
-            <label key={j} className={[d.currect ? style.currectOption : '']}>
-              Option {j + 1}:
-              {(c.type === 't' || c.type === 'ti') && (
-                <>
-                  {' (Text)'}
-                  <input
-                    type='text'
-                    value={d.text}
-                    onChange={e => changeOptionT(i, j, e)}
-                  />
-                </>
-              )}
-              {(c.type === 'i' || c.type === 'ti') && (
-                <>
-                  <img
-                    className={style.optionImage}
-                    src={d.url}
-                    width='40px'
-                    alt='option'
-                  />
-                  <input
-                    type='text'
-                    value={d.url}
-                    onChange={e => changeOptionI(i, j, e)}
-                  />
-                </>
-              )}
-            </label>
-          ))}
-        </div>
-      </>
-    </div>
-  );
-}
+function QuestionAnalysis({ quesModal, setQuesModal }) {
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       setLoading(true);
+  //       const token = localStorage.getItem('auth-token');
+  //       let config = {
+  //         method: 'get',
+  //         maxBodyLength: Infinity,
+  //         url: `https://quizzie-back-end-pygi.onrender.com/api/quize/${id}`,
+  //         headers: {
+  //           'auth-token': token,
+  //         },
+  //         data: {},
+  //       };
+  //       axios.request(config).then(success).catch(fail);
+  //       function success(res) {
+  //         console.log(res.data);
+  //         setQuize(res.data.quize);
+  //         setLoading(false);
+  //       }
 
-function QuestionAnalysis({ selected, close }) {
-  const { id } = selected;
-  const data1 = {
+  //       function fail(err) {
+  //         const msg = err.response?.data?.message || err.message;
+  //         toast.error(msg);
+  //         console.log(err);
+  //         setLoading(false);
+  //       }
+  //     } catch (err) {
+  //       const msg = err.response?.data?.message || err.message;
+  //       toast.error(msg);
+  //       console.log(err);
+  //       setLoading(false);
+  //     }
+  //   }
+  //   fetchData();
+  // }, []);
+
+  const data = {
     date: new Date().toISOString().split('T')[0],
     name: 'Random Quize',
     imp: 1300,
@@ -504,7 +488,7 @@ function QuestionAnalysis({ selected, close }) {
       },
     ],
   };
-  const data = {
+  const data1 = {
     date: new Date().toISOString().split('T')[0],
     name: 'Random Quize',
     imp: 1300,
@@ -561,7 +545,10 @@ function QuestionAnalysis({ selected, close }) {
             ))}
         </div>
         <div className={style.questionModalBtn}>
-          <button className={style.questionCancel} onClick={close}>
+          <button
+            className={style.questionCancel}
+            onClick={() => setQuesModal(null)}
+          >
             Close
           </button>
         </div>

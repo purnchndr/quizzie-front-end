@@ -287,15 +287,6 @@ td {
   margin: 10px 0;
 }
 
-.editQuestion input {
-  padding: 2px 10px;
-  border: none;
-  background-color: var(--bg-clr);
-  font-size: 18px;
-  border-radius: 1rem;
-  margin: 2px 5px;
-}
-
 .editOptions {
   display: flex;
   justify-content: space-around;
@@ -315,8 +306,7 @@ td {
 }
 
 .currectOption {
-  background-color: var(--light-green);
-  /* color: white; */
+  background-color: var(--light-green) !important;
   padding: 2px;
   border-radius: 0.5rem;
 }
@@ -330,4 +320,28 @@ td {
   box-shadow: 0 0 5px var(--shadow-clr);
   background-color: var(--green);
   color: white;
+}
+
+.questionOption {
+  /* border: 2px solid black; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: var(--bg-clr);
+  flex-grow: 50%;
+  margin: 10px;
+}
+
+.questionOption img {
+  width: 300px;
+}
+
+.editQuestion input {
+  padding: 5px 10px;
+  border: none;
+  background-color: var(--bg-clr);
+  font-size: 18px;
+  border-radius: 0.5rem;
+  margin: 2px 5px;
 }

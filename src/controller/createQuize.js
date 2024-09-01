@@ -48,17 +48,6 @@ function reducer(state, action) {
       return questionOptionText(state, action);
     case 'updateOptionUrl':
       return questionOptionUrl(state, action);
-    // case 'submitQuize':
-    //   return submitQuize(state, action);
-    // case 'setLoading':
-    //   return submitQuize(state, action);
-    // case 'uploadData':
-    //   return uploadData(state, action);
-    // case 'loading':
-    //   return setLoading(state, action);
-    // case 'submitted':
-    //   return setSubmitted(state, action);
-
     case 'reset':
       return reset();
     default:
@@ -177,38 +166,22 @@ function reset(state, action) {
 
 async function quizeUpload(data) {
   data.createdOn = Date.now();
-
-  // console.log(data);
-  // const imgurl =
-  //   'https://purnchndr.github.io/imagecdn/img/pratap/freelancer.jpg';
-  // data.questions = data.questions.map(q => {
-  //   q.options.map(o => {
-  //     if (o.text || o.url)
-  //       return { currect: false, disabled: false, text: 'none', url: imgurl };
-  //     return o;
-  //   });
-  // });
-  // console.log(data);
-
   const authToken = localStorage.getItem('auth-token');
-  console.log(authToken);
   if (!authToken) {
     toast.error('First login to continue');
     return useNavigate('/login');
   }
-
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: 'https://quizzie-back-end-pygi.onrender.com/api/quize',
-    headers: { 'auth-token': authToken },
-    data: data,
-  };
   try {
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://quizzie-back-end-pygi.onrender.com/api/quize',
+      headers: { 'auth-token': authToken },
+      data: data,
+    };
     const res = await axios.request(config); //.then(success).catch(fail);
     const { id, message, result } = res.data;
     data.link = `https://prataps-quizzi.netlify.app/${id}`;
-    // data.submitted = true;
     toast.success('Quize created');
     console.log(res.data);
     return res.data;
@@ -221,7 +194,6 @@ async function quizeUpload(data) {
 }
 
 function validateQuestion(data) {
-  // return true;
   console.log('validate');
   const question = data.questions[data.selected];
   if (!question.name) {

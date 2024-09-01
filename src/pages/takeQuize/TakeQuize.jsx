@@ -19,15 +19,13 @@ function TakeQuize() {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `http://localhost:3000/api/quize/takequize${id}`,
-        // url: `https://quizzie-back-end-pygi.onrender.com/api/quize/takequize${id}`,
+        url: `https://quizzie-back-end-pygi.onrender.com/api/quize/takequize${id}`,
         headers: {},
         data: {},
       };
       axios.request(config).then(success).catch(fail);
       function success(res) {
         setQuize(res.data.quize);
-        // console.log(res);
         setLoader(false);
       }
 
@@ -42,23 +40,39 @@ function TakeQuize() {
   }, [id]);
 
   async function handelSubmitted(data) {
-    const id = data._id;
-    setLoader(true);
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: `https://quizzie-back-end-pygi.onrender.com/api/quizedata/${id}`,
-      headers: {},
-      data,
-    };
-    axios.request(config).then(success).catch(fail);
-    function success(res) {
-      console.log(res);
-      setData(data);
-      setLoader(false);
-    }
+    try {
+      const id = quize._id;
+      console.log(data, id);
+      const body = {
+        name: quize.name,
+        submittedOn: Date.now(),
+        type: quize.type,
+        questions: data,
+        quize: id,
+      };
 
-    function fail(err) {
+      setLoader(true);
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://quizzie-back-end-pygi.onrender.com/api/quizedata/${id}`,
+        headers: {},
+        data: body,
+      };
+      axios.request(config).then(success).catch(fail);
+      function success(res) {
+        toast.success('Your responce recorded');
+        setData(data);
+        setLoader(false);
+      }
+
+      function fail(err) {
+        const msg = err.response?.data?.message || err.message;
+        console.log(err);
+        toast.error(msg);
+        setLoader(false);
+      }
+    } catch (err) {
       const msg = err.response?.data?.message || err.message;
       console.log(err);
       toast.error(msg);
@@ -112,7 +126,7 @@ function StartQuize({ quize, handelSubmitted }) {
 function QnATypeQuize({ quize, handelSubmitted }) {
   const length = quize.questions.length;
   const intialState = Array.from({ length }).map(() => {
-    return { selected: -1, currect: false };
+    return { selected: -1, currect: false, name: '' };
   });
 
   function getTiming(index) {
@@ -148,9 +162,11 @@ function QnATypeQuize({ quize, handelSubmitted }) {
     setData(d => {
       const newdata = [...d];
       const currect = quize?.questions[index]?.options[j]?.currect || false;
+      const name = quize?.questions[index]?.name || '';
       newdata[i] = {
         selected: j,
         currect: currect,
+        name,
       };
       return newdata;
     });
@@ -190,16 +206,17 @@ function QnATypeQuize({ quize, handelSubmitted }) {
 function PollTypeQuize({ quize, handelSubmitted }) {
   const length = quize.questions.length;
   const intialState = Array.from({ length }).map(() => {
-    return { selected: -1, currect: false };
+    return { selected: -1, currect: false, name: '' };
   });
   const [data, setData] = useState(intialState);
   const [index, setIndex] = useState(0);
 
   function handelData(i, j) {
-    console.log('handel data', i, j);
     setData(d => {
       const newdata = [...d];
+      const name = quize?.questions[index]?.name || '';
       newdata[i].selected = j;
+      newdata[i].name = name;
       return newdata;
     });
   }
@@ -242,7 +259,6 @@ function PollTypeQuize({ quize, handelSubmitted }) {
 
 function Question({ quize, index, data, handelData, time }) {
   const ques = quize.questions[index];
-  console.log(index, time);
   const selected = data[index]?.selected ?? null;
   function handelSelected(i) {
     handelData(index, i);
@@ -280,7 +296,6 @@ function Question({ quize, index, data, handelData, time }) {
 
 function Option({ option, i, type, selected, handelSelected }) {
   const isSelect = selected === i;
-  //   console.log(isSelect, type, option);
   return (
     <div className={style.option}>
       {type === 't' ? (

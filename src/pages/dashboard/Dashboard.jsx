@@ -22,7 +22,7 @@ function Dashboard() {
         let config = {
           method: 'get',
           maxBodyLength: Infinity,
-          url: 'http://localhost:3000/api/quize/dashboard',
+          url: 'https://quizzie-back-end-pygi.onrender.com/api/quize/dashboard',
           headers: { 'auth-token': token },
           data: {},
         };
