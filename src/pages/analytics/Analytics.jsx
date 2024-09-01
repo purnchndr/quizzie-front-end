@@ -13,59 +13,244 @@ function Analytics() {
   const [editModal, setEditModal] = useState(false);
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([
-    {
-      sr: 1,
-      name: 'quize 1',
-      data: new Date().toLocaleString(),
-      imp: 300,
-      id: 101,
-    },
-    {
-      sr: 2,
-      name: 'quize 88',
-      data: new Date().toLocaleString(),
-      imp: 34,
-      id: 102,
-    },
-    {
-      sr: 3,
-      name: 'quize 1',
-      data: new Date().toLocaleString(),
-      imp: 56,
-      id: 103,
-    },
-    {
-      sr: 1,
-      name: 'quize 1',
-      data: new Date().toLocaleString(),
-      imp: 300,
-      id: 101,
-    },
-  ]);
+  const [data, setData] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem('auth-token');
+        let data = '';
+        let config = {
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: 'https://quizzie-back-end-pygi.onrender.com/api/quize',
+          headers: {
+            'auth-token': token,
+          },
+          data: data,
+        };
+        axios.request(config).then(success).catch(fail);
+        function success(res) {
+          console.log(res.data);
+          setData(res.data.quizes);
+          setLoading(false);
+        }
+
+        function fail(err) {
+          const msg = err.response?.data?.message || err.message;
+          toast.error(msg);
+          console.log(err);
+          setLoading(false);
+        }
+      } catch (err) {
+        const msg = err.response?.data?.message || err.message;
+        toast.error(msg);
+        console.log(err);
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [refresh]);
+
+  const handelSelected = c => setSelected(c);
+
+  const showQuesModal = () => setQuesModal(true);
+  const hideQuesModal = () => setQuesModal(false);
+
+  function handelShare(id) {
+    navigator.clipboard.writeText(`https://prataps-quizzi.netlify.app/${id}`);
+    toast.success('Link Copied to Clipboard');
+  }
+
+  return (
+    <>
+      {data && (
+        <div className={style.analytics}>
+          <ToastContainer />
+          <DashboardHeader />
+          <main className={style.main}>
+            <h1 className={style.heading}>Analytics</h1>
+            <div className={style.data}>
+              <table>
+                <thead>
+                  <tr>
+                    <td>Sr. No.</td>
+                    <td>Quize Name</td>
+                    <td>Created on</td>
+                    <td>Impressions</td>
+                    <td>Edit</td>
+                    <td>Delete</td>
+                    <td>Share</td>
+                    <td>View Details</td>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {data.map((curr, i) => (
+                    <DataRow
+                      select={handelSelected}
+                      share={handelShare}
+                      data={curr}
+                      key={i}
+                      sr={i + 1}
+                      setDelModal={setDelModal}
+                      showQuestion={showQuesModal}
+                      showEdit={setEditModal}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </main>
+        </div>
+      )}
+      {delModal && (
+        <DeleteConfirmation
+          setRefresh={setRefresh}
+          setDelModal={setDelModal}
+          deleteModal={delModal}
+        />
+      )}
+      {quesModal && (
+        <QuestionAnalysis selected={selected} close={hideQuesModal} />
+      )}
+      {editModal && <EditModal closeEM={setEditModal} id={editModal} />}
+      {loading && <Loder />}
+    </>
+  );
+}
+
+function DataRow(props) {
+  const { select, setDelModal, share, showQuestion, showEdit, data, sr } =
+    props;
+  const { name, createdOn, impressions, _id } = data;
+  const imp =
+    impressions > 999 ? `${(impressions / 1000).toFixed(1)} + K` : impressions;
+  const dateStr = new Date(createdOn).toLocaleDateString();
+  return (
+    <tr onClick={() => select({ name, _id, sr })}>
+      <td>{sr}</td>
+      <td>{name}</td>
+      <td>{dateStr}</td>
+      <td>{imp}</td>
+      <td className={style.edit} onClick={() => showEdit(_id)}>
+        <img src='/img/edit.png' width='20px' alt='edit icon' />
+      </td>
+      <td className={style.delete} onClick={() => setDelModal({ _id, name })}>
+        <img src='/img/delete.svg' width='20px' alt='delete icon' />
+      </td>
+      <td className={style.share} onClick={() => share(_id)}>
+        <img src='/img/share.svg' width='20px' alt='share icon' />
+      </td>
+      <td className={style.link} onClick={() => showQuestion(_id)}>
+        Question Wise Analysis
+      </td>
+    </tr>
+  );
+}
+
+function DeleteConfirmation({ setRefresh, setDelModal, deleteModal }) {
+  const { _id, name } = deleteModal;
+  const [loading, setLoading] = useState(false);
+  console.log(_id);
+
+  async function handelDelete() {
+    try {
       setLoading(true);
       const token = localStorage.getItem('auth-token');
-      let data = '';
       let config = {
-        method: 'get',
+        method: 'delete',
         maxBodyLength: Infinity,
-        url: 'https://quizzie-back-end-pygi.onrender.com/api/quize',
+        url: `https://quizzie-back-end-pygi.onrender.com/api/quize/${_id}`,
         headers: {
           'auth-token': token,
         },
-        data: data,
+        data: {},
       };
       axios.request(config).then(success).catch(fail);
       function success(res) {
-        const data = res;
-        console.log(JSON.stringify(data));
+        console.log(res.data);
+        toast.success('Quize Deleted');
         setLoading(false);
+        setDelModal(null);
+        setRefresh(c => !c);
       }
 
       function fail(err) {
+        const msg = err.response?.data?.message || err.message;
+        toast.error(msg);
+        console.log(err);
+        setLoading(false);
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message;
+      toast.error(msg);
+      console.log(err);
+      setLoading(false);
+    }
+  }
+
+  return (
+    <>
+      {loading ? (
+        <Loder />
+      ) : (
+        <div className={style.deleteModalBg}>
+          <div className={style.deleteModal}>
+            <p>You are about to delete "{name}" Quize</p>
+            <div className={style.deleteModalBtn}>
+              <button className={style.delConfirm} onClick={handelDelete}>
+                Confirm Delete
+              </button>
+              <button
+                className={style.delCancel}
+                onClick={() => setDelModal(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function EditModal({ id, closeEM }) {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [quize, setQuize] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem('auth-token');
+        let config = {
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: `https://quizzie-back-end-pygi.onrender.com/api/quize/${id}`,
+          headers: {
+            'auth-token': token,
+          },
+          data: {},
+        };
+        axios.request(config).then(success).catch(fail);
+        function success(res) {
+          console.log(res.data);
+          setQuize(res.data.quize);
+          setLoading(false);
+        }
+
+        function fail(err) {
+          const msg = err.response?.data?.message || err.message;
+          toast.error(msg);
+          console.log(err);
+          setLoading(false);
+        }
+      } catch (err) {
         const msg = err.response?.data?.message || err.message;
         toast.error(msg);
         console.log(err);
@@ -75,252 +260,6 @@ function Analytics() {
     fetchData();
   }, []);
 
-  // console.log(data);
-  const handelSelected = c => setSelected(c);
-  const showDelModal = () => setDelModal(true);
-  const hideDelModal = () => setDelModal(false);
-  const showQuesModal = () => setQuesModal(true);
-  const hideQuesModal = () => setQuesModal(false);
-
-  function handelDelete(id) {
-    hideDelModal();
-    toast.success('Deleted successfully');
-  }
-
-  function handelShare(id) {
-    navigator.clipboard.writeText(id);
-    toast.success('Link Copied to Clipboard');
-  }
-
-  console.log(selected);
-  return (
-    <>
-      <div className={style.analytics}>
-        <ToastContainer />
-        <DashboardHeader />
-        <main className={style.main}>
-          <ToastContainer />
-          <h1 className={style.heading}>Analytics</h1>
-          <div className={style.data}>
-            <table>
-              <thead>
-                <tr>
-                  <td>Sr. No.</td>
-                  <td>Quize Name</td>
-                  <td>Created on</td>
-                  <td>Impressions</td>
-                  <td>Edit</td>
-                  <td>Delete</td>
-                  <td>Share</td>
-                  <td>View Details</td>
-                </tr>
-              </thead>
-
-              <tbody>
-                {data.map((curr, i) => (
-                  <DataRow
-                    select={handelSelected}
-                    share={handelShare}
-                    data={curr}
-                    key={i}
-                    showDelModal={showDelModal}
-                    showQuestion={showQuesModal}
-                    showEdit={setEditModal}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </main>
-      </div>
-      {delModal && (
-        <DeleteConfirmation
-          selected={selected}
-          handelDelete={handelDelete}
-          closeModal={hideDelModal}
-        />
-      )}
-      {quesModal && (
-        <QuestionAnalysis selected={selected} close={hideQuesModal} />
-      )}
-      {editModal && <EditModal closeEM={setEditModal} selected={selected} />}
-      {loading && <Loder />}
-    </>
-  );
-}
-
-function DataRow(props) {
-  const { select, showDelModal, share, showQuestion, showEdit, data } = props;
-  const { sr, name, date, imp, id } = data;
-  const impressions = imp > 999 ? `${(imp / 1000).toFixed(1)} + K` : imp;
-  return (
-    <tr onClick={() => select({ name, id, sr })}>
-      <td>{sr}</td>
-      <td>{name}</td>
-      <td>{date}</td>
-      <td>{impressions}</td>
-      <td className={style.edit} onClick={() => showEdit(true)}>
-        <img src='/img/edit.png' width='20px' alt='edit icon' />
-      </td>
-      <td className={style.delete} onClick={() => showDelModal(id)}>
-        <img src='/img/delete.svg' width='20px' alt='delete icon' />
-      </td>
-      <td className={style.share} onClick={() => share(id)}>
-        <img src='/img/share.svg' width='20px' alt='share icon' />
-      </td>
-      <td className={style.link} onClick={showQuestion}>
-        Question Wise Analysis
-      </td>
-    </tr>
-  );
-}
-
-function DeleteConfirmation({ selected, handelDelete, closeModal }) {
-  const { id, name } = selected;
-  return (
-    <div className={style.deleteModalBg}>
-      <div className={style.deleteModal}>
-        <p>You are about to delete "{name}" Quize</p>
-        <div className={style.deleteModalBtn}>
-          <button className={style.delConfirm} onClick={() => handelDelete(id)}>
-            Confirm Delete
-          </button>
-          <button className={style.delCancel} onClick={closeModal}>
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function EditModal({ selected, closeEM }) {
-  const { id, name } = selected;
-  const quiziedata = {
-    name: 'React quize',
-    questions: [
-      {
-        name: 'Test Name1',
-        type: 't',
-        options: [
-          {
-            text: 'OPtion a',
-            currect: true,
-          },
-          {
-            text: 'OPtion a',
-            currect: false,
-          },
-          {
-            text: 'OPtion a',
-            currect: false,
-          },
-          {
-            text: 'OPtion a',
-            currect: false,
-          },
-        ],
-      },
-      {
-        name: 'Test Name 2',
-        type: 'i',
-        options: [
-          {
-            url: 'OPtion a',
-            currect: false,
-          },
-          {
-            url: 'OPtion a',
-            currect: false,
-          },
-          {
-            url: 'OPtion a',
-            currect: true,
-          },
-          {
-            url: 'OPtion a',
-            currect: false,
-          },
-        ],
-      },
-      {
-        name: 'Test Name 3',
-        type: 'ti',
-        options: [
-          {
-            text: 'Option Text',
-            url: 'Option Url',
-            currect: false,
-          },
-          {
-            text: 'Option Text',
-            url: 'Option Url',
-            currect: false,
-          },
-          {
-            text: 'Option Text',
-            url: 'Option Url',
-            currect: false,
-          },
-          {
-            text: 'Option Text',
-            url: 'Option Url',
-            currect: true,
-          },
-        ],
-      },
-      {
-        name: 'Test Name 4',
-        type: 'ti',
-        options: [
-          {
-            text: 'Option Text',
-            url: 'Option Url',
-            currect: false,
-          },
-          {
-            text: 'Option Text',
-            url: 'Option Url',
-            currect: true,
-          },
-          {
-            text: 'Option Text',
-            url: 'Option Url',
-            currect: false,
-          },
-          {
-            text: 'Option Text',
-            url: 'Option Url',
-            currect: false,
-          },
-        ],
-      },
-      {
-        name: 'Test Name 5',
-        type: 'i',
-        options: [
-          {
-            url: 'OPtion a',
-            currect: true,
-          },
-          {
-            url: 'OPtion a',
-            currect: false,
-          },
-          {
-            url: 'OPtion a',
-            currect: false,
-          },
-          {
-            url: 'OPtion a',
-            currect: false,
-          },
-        ],
-      },
-    ],
-  };
-
-  const [quize, setQuize] = useState(quiziedata);
   function changeOptionT(i, j, e) {
     const data = { ...quize };
     data.questions[i].options[j].text = e.target.value;
@@ -340,73 +279,187 @@ function EditModal({ selected, closeEM }) {
     closeEM(false);
   }
   function handelEdit() {
-    console.log('edited');
-    closeEM(false);
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('auth-token');
+      let config = {
+        method: 'patch',
+        maxBodyLength: Infinity,
+        url: `http://localhost:3000/api/quize/${id}`,
+        headers: {
+          'auth-token': token,
+        },
+        data: quize,
+      };
+      axios.request(config).then(success).catch(fail);
+      function success(res) {
+        console.log(res);
+        toast.success('Quize Upadated');
+        setLoading(false);
+        closeEM(false);
+      }
+
+      function fail(err) {
+        const msg = err.response?.data?.message || err.message;
+        toast.error(msg);
+        console.log(err);
+        setLoading(false);
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message;
+      toast.error(msg);
+      console.log(err);
+      setLoading(false);
+    }
   }
 
   return (
-    <div className={style.editModalBg}>
-      <div className={style.editModal}>
-        <div className={style.editHeader}>
-          <span>Edit</span>
-          <h1>{quize.name}</h1>
+    <>
+      {loading && <Loder />}
+      {quize && (
+        <div className={style.editModalBg}>
+          <div className={style.editModal}>
+            <div className={style.editHeader}>
+              <span>Edit</span>
+              <h1>{quize.name}</h1>
+            </div>
+            <div className={style.editBody}>
+              {quize.questions.map((c, i) => (
+                <QuestionEditor
+                  key={i}
+                  prop={{
+                    c,
+                    i,
+                    nameChange,
+                    changeOptionT,
+                    changeOptionI,
+                  }}
+                />
+              ))}
+            </div>
+
+            <div className={style.editModalFooter}>
+              <button className={style.delCancel} onClick={closeModal}>
+                Cancel
+              </button>
+              <button
+                className={style.saveConfirm}
+                onClick={() => handelEdit(id)}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
         </div>
-        <div className={style.editBody}>
-          {quize.questions.map((c, i) => (
-            <div key={i} className={style.editQuestion}>
-              <>
-                <label>
-                  Question {i + 1}:
+      )}
+    </>
+  );
+}
+
+function QuestionEditor({ prop }) {
+  const { c, i, nameChange, changeOptionT, changeOptionI } = prop;
+  return (
+    <div key={i} className={style.editQuestion}>
+      <>
+        <label>
+          Question {i + 1}:
+          <input type='text' value={c.name} onChange={e => nameChange(i, e)} />
+        </label>
+        <div className={style.editOptions}>
+          {c.options.map((d, j) => (
+            <div
+              className={[
+                d.currect ? style.currectOption : '',
+                style.questionOption,
+              ].join(' ')}
+              key={j}
+            >
+              {c.type === 't' && (
+                <>
                   <input
                     type='text'
-                    value={c.name}
-                    onChange={e => nameChange(i, e)}
+                    value={d.text}
+                    onChange={e => changeOptionT(i, j, e)}
                   />
-                </label>
-                <div className={style.editOptions}>
-                  {c.options.map((d, j) => (
-                    <label
-                      key={j}
-                      className={[d.currect ? style.currectOption : '']}
-                    >
-                      Option {j + 1}:
-                      {(c.type === 't' || c.type === 'ti') && (
-                        <>
-                          {' (Text)'}
-                          <input
-                            type='text'
-                            value={d.text}
-                            onChange={e => changeOptionT(i, j, e)}
-                          />
-                        </>
-                      )}
-                      {(c.type === 'i' || c.type === 'ti') && (
-                        <>
-                          {' (Image)'}
-                          <input
-                            type='text'
-                            value={d.url}
-                            onChange={e => changeOptionI(i, j, e)}
-                          />
-                        </>
-                      )}
-                    </label>
-                  ))}
-                </div>
-              </>
+                </>
+              )}
+
+              {c.type === 'i' && (
+                <>
+                  <img src={d.url} alt='option' />
+                  <input
+                    type='url'
+                    value={d.url}
+                    onChange={e => changeOptionI(i, j, e)}
+                  />
+                </>
+              )}
+
+              {c.type === 'ti' && (
+                <>
+                  <input
+                    type='text'
+                    value={d.text}
+                    onChange={e => changeOptionT(i, j, e)}
+                  />
+                  <img src={d.url} alt='option' />
+                  <input
+                    type='url'
+                    value={d.url}
+                    onChange={e => changeOptionI(i, j, e)}
+                  />
+                </>
+              )}
             </div>
           ))}
         </div>
+      </>
+    </div>
+  );
+}
 
-        <div className={style.editModalFooter}>
-          <button className={style.delCancel} onClick={closeModal}>
-            Cancel
-          </button>
-          <button className={style.saveConfirm} onClick={() => handelEdit(id)}>
-            Save Changes
-          </button>
+function QuestionEditor2({ prop }) {
+  const { c, i, nameChange, changeOptionT, changeOptionI } = prop;
+  return (
+    <div key={i} className={style.editQuestion}>
+      <>
+        <label>
+          Question {i + 1}:
+          <input type='text' value={c.name} onChange={e => nameChange(i, e)} />
+        </label>
+        <div className={style.editOptions}>
+          {c.options.map((d, j) => (
+            <label key={j} className={[d.currect ? style.currectOption : '']}>
+              Option {j + 1}:
+              {(c.type === 't' || c.type === 'ti') && (
+                <>
+                  {' (Text)'}
+                  <input
+                    type='text'
+                    value={d.text}
+                    onChange={e => changeOptionT(i, j, e)}
+                  />
+                </>
+              )}
+              {(c.type === 'i' || c.type === 'ti') && (
+                <>
+                  <img
+                    className={style.optionImage}
+                    src={d.url}
+                    width='40px'
+                    alt='option'
+                  />
+                  <input
+                    type='text'
+                    value={d.url}
+                    onChange={e => changeOptionI(i, j, e)}
+                  />
+                </>
+              )}
+            </label>
+          ))}
         </div>
-      </div>
+      </>
     </div>
   );
 }

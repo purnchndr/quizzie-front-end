@@ -177,6 +177,19 @@ function reset(state, action) {
 
 async function quizeUpload(data) {
   data.createdOn = Date.now();
+
+  // console.log(data);
+  // const imgurl =
+  //   'https://purnchndr.github.io/imagecdn/img/pratap/freelancer.jpg';
+  // data.questions = data.questions.map(q => {
+  //   q.options.map(o => {
+  //     if (o.text || o.url)
+  //       return { currect: false, disabled: false, text: 'none', url: imgurl };
+  //     return o;
+  //   });
+  // });
+  // console.log(data);
+
   const authToken = localStorage.getItem('auth-token');
   console.log(authToken);
   if (!authToken) {

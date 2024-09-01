@@ -17,6 +17,7 @@ function DashBannerLarge({ num, type, action, color = 'red' }) {
 
 function DashBannerSmall({ name, num, date }) {
   num = num > 999 ? `${(num / 1000).toFixed(1)}K` : num;
+  const dateStr = 'Created on: ' + new Date(date).toLocaleDateString();
   return (
     <div className={style.dbSmall}>
       <div className={style.dbSmallNums}>
@@ -24,15 +25,15 @@ function DashBannerSmall({ name, num, date }) {
         <span className={style.numSmall}>
           {num}{' '}
           <img
-            src='./img/views.svg'
-            width='15px'
+            src='./img/growth.png'
+            width='20px'
             height='15px'
             alt='eye logo'
           />
         </span>
       </div>
       <div>
-        <p className={style.date}>{date}</p>
+        <p className={style.date}>{dateStr}</p>
       </div>
     </div>
   );

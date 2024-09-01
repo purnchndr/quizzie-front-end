@@ -5,7 +5,6 @@ function DashboardHeader() {
   const navigate = useNavigate();
 
   function logout() {
-    //todo update logout
     console.log('logout');
     localStorage.removeItem('auth-token');
     navigate('/login');

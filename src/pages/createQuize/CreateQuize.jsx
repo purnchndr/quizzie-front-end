@@ -416,7 +416,6 @@ function OptionsRadio({ i, data, dispatch, disabled, radioDisable }) {
 
   const handelOptionSelect = () => {
     const options = data.questions[data.selected].options;
-    console.log(options, i);
     const selected = options.some(c => c.selected);
     if (selected) return toast.error('Only one answer can be Currect');
     dispatch({ type: 'updateOptionRadio', payload: i });

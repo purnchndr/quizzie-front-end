@@ -4,58 +4,95 @@ import { useEffect, useState } from 'react';
 import Loader from '../../components/loder/Loder';
 import style from './TakeQuize.module.css';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 function TakeQuize() {
   const location = useLocation();
   const id = location.pathname;
   const [quize, setQuize] = useState(null);
   const [start, setStart] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [data, setData] = useState(null);
   useEffect(() => {
     async function getdata() {
-      const token = localStorage.getItem('auth-token');
+      setLoader(true);
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `https://quizzie-back-end-pygi.onrender.com/api/quize/${id}`,
-        headers: { 'auth-token': token },
+        url: `http://localhost:3000/api/quize/takequize${id}`,
+        // url: `https://quizzie-back-end-pygi.onrender.com/api/quize/takequize${id}`,
+        headers: {},
         data: {},
       };
       axios.request(config).then(success).catch(fail);
       function success(res) {
         setQuize(res.data.quize);
-        console.log(res);
+        // console.log(res);
+        setLoader(false);
       }
 
       function fail(err) {
         const msg = err.response?.data?.message || err.message;
         console.log(err);
         toast.error(msg);
+        setLoader(false);
       }
     }
     getdata();
   }, [id]);
 
-  function handelSubmitted(data) {
-    data = data;
-    console.log(data);
-    setData(data);
-    setStart(false);
-  }
+  async function handelSubmitted(data) {
+    const id = data._id;
+    setLoader(true);
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `https://quizzie-back-end-pygi.onrender.com/api/quizedata/${id}`,
+      headers: {},
+      data,
+    };
+    axios.request(config).then(success).catch(fail);
+    function success(res) {
+      console.log(res);
+      setData(data);
+      setLoader(false);
+    }
 
+    function fail(err) {
+      const msg = err.response?.data?.message || err.message;
+      console.log(err);
+      toast.error(msg);
+      setLoader(false);
+    }
+  }
+  const startQuize = start & !data;
+  const welcome = quize && !start;
   return (
     <>
-      {!quize ? (
+      <ToastContainer />
+      {loader ? (
         <Loader />
+      ) : startQuize ? (
+        <StartQuize quize={quize} handelSubmitted={handelSubmitted} />
+      ) : welcome ? (
+        <WelcomeScreen quize={quize} setStart={setStart} />
       ) : data ? (
         <SubmittedScreen data={data} type={quize.type} />
-      ) : start ? (
-        <StartQuize quize={quize} handelSubmitted={handelSubmitted} />
       ) : (
-        <WelcomeScreen quize={quize} setStart={setStart} />
+        <NotFound />
       )}
     </>
+  );
+}
+
+function NotFound() {
+  return (
+    <div className={style.notFoundBox}>
+      <div className={style.notFound}>
+        <h1>Quize not Found</h1>
+        <p>Ask quize owner to share the link again</p>
+      </div>
+    </div>
   );
 }
 
@@ -207,7 +244,6 @@ function Question({ quize, index, data, handelData, time }) {
   const ques = quize.questions[index];
   console.log(index, time);
   const selected = data[index]?.selected ?? null;
-  quize.type = 'qna';
   function handelSelected(i) {
     handelData(index, i);
   }
