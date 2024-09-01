@@ -42,7 +42,6 @@ function TakeQuize() {
   async function handelSubmitted(data) {
     try {
       const id = quize._id;
-      console.log(data, id);
       const body = {
         name: quize.name,
         submittedOn: Date.now(),
@@ -272,7 +271,7 @@ function Question({ quize, index, data, handelData, time }) {
         </span>
         <h1 className={style.questionName}>{ques.name}</h1>
 
-        {time && <span className={style.timer}>00:{time} s</span>}
+        {time ? <span className={style.timer}>00:{time} s</span> : <div></div>}
 
         {/* {quize.type === 'qna' && (
           <span className={style.timer}>00:{time} s</span>

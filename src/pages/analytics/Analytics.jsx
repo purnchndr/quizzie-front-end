@@ -33,7 +33,6 @@ function Analytics() {
         };
         axios.request(config).then(success).catch(fail);
         function success(res) {
-          console.log(res.data);
           setData(res.data.quizes);
           setLoading(false);
         }
@@ -146,7 +145,6 @@ function DataRow(props) {
 function DeleteConfirmation({ setRefresh, setDelModal, deleteModal }) {
   const { _id, name } = deleteModal;
   const [loading, setLoading] = useState(false);
-  console.log(_id);
 
   async function handelDelete() {
     try {
@@ -163,7 +161,6 @@ function DeleteConfirmation({ setRefresh, setDelModal, deleteModal }) {
       };
       axios.request(config).then(success).catch(fail);
       function success(res) {
-        console.log(res.data);
         toast.success('Quize Deleted');
         setLoading(false);
         setDelModal(null);
@@ -230,7 +227,6 @@ function EditModal({ id, closeEM }) {
         };
         axios.request(config).then(success).catch(fail);
         function success(res) {
-          console.log(res.data);
           setQuize(res.data.quize);
           setLoading(false);
         }
@@ -284,7 +280,6 @@ function EditModal({ id, closeEM }) {
       };
       axios.request(config).then(success).catch(fail);
       function success(res) {
-        console.log(res);
         toast.success('Quize Upadated');
         setLoading(false);
         closeEM(false);
@@ -413,44 +408,46 @@ function QuestionEditor({ prop }) {
 }
 
 function QuestionAnalysis({ quesModal, setQuesModal }) {
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       setLoading(true);
-  //       const token = localStorage.getItem('auth-token');
-  //       let config = {
-  //         method: 'get',
-  //         maxBodyLength: Infinity,
-  //         url: `https://quizzie-back-end-pygi.onrender.com/api/quize/${id}`,
-  //         headers: {
-  //           'auth-token': token,
-  //         },
-  //         data: {},
-  //       };
-  //       axios.request(config).then(success).catch(fail);
-  //       function success(res) {
-  //         console.log(res.data);
-  //         setQuize(res.data.quize);
-  //         setLoading(false);
-  //       }
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  //       function fail(err) {
-  //         const msg = err.response?.data?.message || err.message;
-  //         toast.error(msg);
-  //         console.log(err);
-  //         setLoading(false);
-  //       }
-  //     } catch (err) {
-  //       const msg = err.response?.data?.message || err.message;
-  //       toast.error(msg);
-  //       console.log(err);
-  //       setLoading(false);
-  //     }
-  //   }
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem('auth-token');
+        let config = {
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: `https://quizzie-back-end-pygi.onrender.com/api/quizedata/quizeanalysis/${quesModal}`,
+          headers: {
+            'auth-token': token,
+          },
+          data: {},
+        };
+        axios.request(config).then(success).catch(fail);
+        function success(res) {
+          setData(res.data.analytics);
+          setLoading(false);
+        }
 
-  const data = {
+        function fail(err) {
+          const msg = err.response?.data?.message || err.message;
+          toast.error(msg);
+          console.log(err);
+          setLoading(false);
+        }
+      } catch (err) {
+        const msg = err.response?.data?.message || err.message;
+        toast.error(msg);
+        console.log(err);
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const data1 = {
     date: new Date().toISOString().split('T')[0],
     name: 'Random Quize',
     imp: 1300,
@@ -488,7 +485,7 @@ function QuestionAnalysis({ quesModal, setQuesModal }) {
       },
     ],
   };
-  const data1 = {
+  const data3 = {
     date: new Date().toISOString().split('T')[0],
     name: 'Random Quize',
     imp: 1300,
@@ -517,89 +514,121 @@ function QuestionAnalysis({ quesModal, setQuesModal }) {
     ],
   };
 
-  console.log(data.questions);
   return (
-    <div className={style.questionModalBg}>
-      <div className={style.questionModal}>
-        <div className={style.questionModalHeader}>
-          <h1>{data.name} Question Analysis</h1>
-          <div className={style.questionModalSide}>
-            <p>Created on: {data.date}</p>
-            <p>Impressions: {lageValues(data.imp)}</p>
+    <>
+      {loading ? (
+        <Loder />
+      ) : (
+        data && (
+          <div className={style.questionModalBg}>
+            <div className={style.questionModal}>
+              <div className={style.questionModalHeader}>
+                <h1>{data.name}</h1>
+                <div className={style.questionModalSide}>
+                  <p className={style.questionModalSideTime}>
+                    Created on: {new Date(data.createdOn).toLocaleDateString()}
+                  </p>
+                  <p>Impressions: {lageValues(data.impressions)}</p>
+                </div>
+              </div>
+              <div className={style.questionModalData}>
+                {data.type === 'qna' &&
+                  data.questions.map((c, i) => (
+                    <QuestionDataQNA key={i} name={c.name} data={c} />
+                  ))}
+                {data.type === 'poll' &&
+                  data.questions.map((c, i) => (
+                    <QuestionDataPoll
+                      name={c.name}
+                      key={i}
+                      nums={c.stats}
+                      data={c}
+                    />
+                  ))}
+              </div>
+              <div className={style.questionModalBtn}>
+                <button
+                  className={style.questionCancel}
+                  onClick={() => setQuesModal(null)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className={style.questionModalData}>
-          {data.type === 'qna' &&
-            data.questions.map((c, i) => (
-              <QuestionDataQNA
-                key={i}
-                name={c.name}
-                num={c.attempts}
-                curr={c.currect}
-                incurr={c.incorrect}
-              />
-            ))}
-          {data.type === 'poll' &&
-            data.questions.map((c, i) => (
-              <QuestionDataPoll name={c.name} nums={c.stats} />
-            ))}
-        </div>
-        <div className={style.questionModalBtn}>
-          <button
-            className={style.questionCancel}
-            onClick={() => setQuesModal(null)}
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
+        )
+      )}
+    </>
   );
 }
 function lageValues(num) {
   return num > 999 ? `${(num / 1000).toFixed(1)}K` : num;
 }
 
-function QuestionDataQNA({ name, num, curr, incurr }) {
+function QuestionDataQNA({ name, data }) {
   return (
     <div className={style.question}>
       <h2>{name}</h2>
+
       <div className={style.questionStatics}>
         <div className={style.questionBox}>
-          <p className={style.questionBoxNum1}>{lageValues(num)}</p>
+          <p className={style.questionBoxNum1}>{lageValues(data.taken)}</p>
           <p className={style.questionBoxText}>People Attempted the Question</p>
         </div>
         <div className={style.questionBox}>
-          <p className={style.questionBoxNum2}>{lageValues(curr)}</p>
-          <p className={style.questionBoxText}>People Answered Currectly</p>
+          <p className={style.questionBoxNum2}>{lageValues(data.currect)}</p>
+          <p className={style.questionBoxText}>People Answered Correctly</p>
         </div>
         <div className={style.questionBox}>
-          <p className={style.questionBoxNum3}>{lageValues(incurr)}</p>
-          <p className={style.questionBoxText}>People Answered Incurrectly</p>
+          <p className={style.questionBoxNum3}>{lageValues(data.incurrect)}</p>
+          <p className={style.questionBoxText}>People Answered Incorrectly</p>
         </div>
       </div>
     </div>
   );
 }
 
-function QuestionDataPoll({ name, nums }) {
+function QuestionDataPoll({ nums, data }) {
   return (
     <div className={style.question}>
-      <h2>{name}</h2>
+      <h2>{data.name}</h2>
       <div className={style.questionStatics}>
-        {nums.map((c, i) => (
-          <GetDataRow num={i + 1} count={c} />
+        {data.options.map((c, i) => (
+          <GetDataRow data={c} key={i} />
         ))}
       </div>
     </div>
   );
 
-  function GetDataRow({ count, num }) {
+  function GetDataRow({ data }) {
+    const type = data.type;
+
     return (
-      <div className={style.questionBoxPoll}>
-        <p className={style.questionBoxNum}>{lageValues(count)} </p>
-        <p className={style.questionBoxText}> Option {num}</p>
-      </div>
+      <>
+        {type === 't' ? (
+          <div className={style.questionBoxPoll}>
+            <span className={style.questionBoxNum}>
+              {lageValues(data.selected)}{' '}
+            </span>
+            <span className={style.questionBoxText}>{data.text}</span>
+          </div>
+        ) : type === 'i' ? (
+          <div className={style.questionBoxPoll}>
+            <span className={style.questionBoxNum}>
+              {lageValues(data.selected)}{' '}
+            </span>
+            <img className={style.questionBoxImg} src={data.url} />
+          </div>
+        ) : (
+          <div className={style.questionBoxPoll}>
+            <span className={style.questionBoxNum}>
+              {lageValues(data.selected)}{' '}
+            </span>
+            <span className={style.questionBoxText}>{data.text}</span>
+            <img className={style.questionBoxImg} src={data.url} />
+          </div>
+        )}
+      </>
     );
   }
 }

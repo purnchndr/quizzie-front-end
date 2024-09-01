@@ -6,6 +6,7 @@
   justify-content: center;
   align-items: center;
   color: var(--text-clr);
+  font-family: 'Roboto', sans-serif;
 }
 
 .welcomeBox {
@@ -50,7 +51,7 @@
 }
 
 .startBox {
-  background-color: white;
+  background-color: var(--bg-clr);
   max-width: 600px;
   max-height: 90%;
   min-width: 70%;
@@ -63,11 +64,13 @@
 
 .startHeader {
   font-size: 12px;
-  box-shadow: 0px 2px 3px black;
+  /* box-shadow: 0px 2px 3px black; */
   border-radius: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  background-color: white;
+  padding: 5px;
 }
 
 .startHeader h1 {
@@ -92,7 +95,9 @@
   justify-content: space-around;
   align-items: center;
   border-radius: 1rem;
-  box-shadow: 0 2px 3px black;
+  background-color: white;
+
+  /* box-shadow: 0 2px 3px black; */
 }
 
 .timer {
@@ -127,18 +132,20 @@
 }
 
 .questionBtn {
+  width: 100%;
   padding: 15px 20px;
   margin: 0 10px;
   border-radius: 0.5rem;
   border: none;
   font-weight: 700;
   font-size: 18px;
-  box-shadow: 0 2px 2px black;
+  background-color: white;
 }
 
 .questionImg {
   width: 200px;
   height: 80px;
+  border-radius: 1rem;
 }
 
 .questionSelected {
@@ -149,13 +156,15 @@
   width: 200px;
   height: 120px;
   cursor: pointer;
+  border-radius: 1rem;
   /* border: 2px solid red; */
-  background-color: var(--bg-clr);
+  background-color: white;
 }
 
 .optionTI img {
   width: 100%;
   height: 80px;
+  border-radius: 1rem 1rem 0 0;
   /* border: 2px solid black; */
 }
 

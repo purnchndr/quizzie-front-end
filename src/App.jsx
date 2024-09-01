@@ -10,12 +10,13 @@ import {
 } from 'react-router-dom';
 import { useState } from 'react';
 import TakeQuize from './pages/takeQuize/TakeQuize';
+import HomePage from './pages/homepage/HomePage';
 
 function App() {
   const [auth, setAuth] = useState(localStorage.getItem('auth-token'));
 
   const router = createBrowserRouter([
-    { path: '/', element: <h1>Hello root</h1> },
+    { path: '/', element: <HomePage /> },
     {
       path: '/login',
       element: <LoginAndSignUp auth={auth} setAuth={setAuth} />,

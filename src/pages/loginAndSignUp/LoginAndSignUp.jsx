@@ -74,7 +74,6 @@ function Login({ setAuth }) {
       function success(res) {
         toast.success('Login Complete');
         const token = res.data.token;
-        console.log(token);
         localStorage.setItem('auth-token', token);
         navigate('/dashboard');
         setAuth(token);
@@ -171,10 +170,8 @@ function Register({ setAuth }) {
       axios.request(config).then(success).catch(fail);
 
       function success(res) {
-        console.log(res);
         toast.success('Registration Complete');
         const token = res.data.token;
-        console.log(token);
         localStorage.setItem('auth-token', token);
         setAuth(token);
         navigate('/dashboard');

@@ -43,7 +43,8 @@
   border-radius: 0.5rem;
   background-color: white;
   min-width: 200px;
-  font-family: 'Kanit', sans-serif;
+  /* font-family: 'Kanit', sans-serif; */
+  font-family: 'Roboto', sans-serif;
 }
 
 .name {

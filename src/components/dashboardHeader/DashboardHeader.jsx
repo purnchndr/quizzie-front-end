@@ -5,9 +5,8 @@ function DashboardHeader() {
   const navigate = useNavigate();
 
   function logout() {
-    console.log('logout');
     localStorage.removeItem('auth-token');
-    navigate('/login');
+    navigate('/');
   }
   return (
     <nav className={style.dashboardHeader}>

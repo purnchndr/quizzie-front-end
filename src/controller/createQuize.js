@@ -160,7 +160,6 @@ function newQuestionAdd(state, action) {
 }
 function reset(state, action) {
   const data = getStateClone(initState);
-  console.log(data);
   return data;
 }
 
@@ -183,7 +182,6 @@ async function quizeUpload(data) {
     const { id, message, result } = res.data;
     data.link = `https://prataps-quizzi.netlify.app/${id}`;
     toast.success('Quize created');
-    console.log(res.data);
     return res.data;
   } catch (err) {
     const msg = err.response?.data?.message || err.message;
@@ -194,7 +192,6 @@ async function quizeUpload(data) {
 }
 
 function validateQuestion(data) {
-  console.log('validate');
   const question = data.questions[data.selected];
   if (!question.name) {
     toast.error('Please enter question name');

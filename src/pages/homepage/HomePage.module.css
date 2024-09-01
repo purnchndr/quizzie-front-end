@@ -1,0 +1,53 @@
+.homePage {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #bebebe;
+}
+
+.header {
+  background-color: white;
+  padding: 20px 50px;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+.body {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 50vh;
+}
+.body p {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.buttons button {
+  border: none;
+  font-size: 30px;
+  margin: 10px 30px;
+  padding: 5px 20px;
+  border-radius: 0.5rem;
+}
+
+.body span {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  font-size: 16px;
+}
