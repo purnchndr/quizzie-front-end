@@ -34,7 +34,7 @@
 }
 
 .welcomeButtons button {
-  padding: 5px 20px;
+  padding: 5px 60px;
   margin: 0 10px;
   border-radius: 0.5rem;
   border: none;
@@ -52,9 +52,9 @@
 
 .startBox {
   background-color: var(--bg-clr);
-  max-width: 600px;
+  /* max-width: 600px;
   max-height: 90%;
-  min-width: 70%;
+  min-width: 70%; */
   padding: 15px;
   border-radius: 1rem;
   border: 2px solid var(--green);
@@ -94,6 +94,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  flex-wrap: wrap;
   border-radius: 1rem;
   background-color: white;
 
