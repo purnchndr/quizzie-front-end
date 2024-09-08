@@ -434,15 +434,28 @@ function OptionsRadio({ i, data, dispatch, disabled, radioDisable }) {
 }
 
 function OptionsText({ value, handeler, placeholder, disabled }) {
+  const image = placeholder === 'Image Url';
+  const setDefault = e => (e.target.src = './img/noimage.png');
   return (
-    <input
-      className={style.selectorInputText}
-      type='text'
-      value={value}
-      onChange={handeler}
-      placeholder={placeholder}
-      disabled={disabled}
-    />
+    <>
+      {image && (
+        <img
+          src={value}
+          className={style.imageUrlLink}
+          width='70px'
+          height='40px'
+          onError={setDefault}
+        />
+      )}
+      <input
+        className={style.selectorInputText}
+        type='text'
+        value={value}
+        onChange={handeler}
+        placeholder={placeholder}
+        disabled={disabled}
+      />
+    </>
   );
 }
 

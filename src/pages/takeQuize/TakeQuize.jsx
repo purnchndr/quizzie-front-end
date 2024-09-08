@@ -15,7 +15,7 @@ function TakeQuize() {
   const [data, setData] = useState(null);
   useEffect(() => {
     async function getdata() {
-      setLoader(true);
+      setLoader('Fetching Quize Data');
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
@@ -41,6 +41,7 @@ function TakeQuize() {
 
   async function handelSubmitted(data) {
     try {
+      setLoader('Submitting your Responce');
       const id = quize._id;
       const body = {
         name: quize.name,
@@ -50,7 +51,6 @@ function TakeQuize() {
         quize: id,
       };
 
-      setLoader(true);
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -61,8 +61,8 @@ function TakeQuize() {
       axios.request(config).then(success).catch(fail);
       function success(res) {
         toast.success('Your responce recorded');
-        setData(data);
         setLoader(false);
+        setData(data);
       }
 
       function fail(err) {
@@ -84,7 +84,7 @@ function TakeQuize() {
     <>
       <ToastContainer />
       {loader ? (
-        <Loader />
+        <Loader text={loader} />
       ) : startQuize ? (
         <StartQuize quize={quize} handelSubmitted={handelSubmitted} />
       ) : welcome ? (
